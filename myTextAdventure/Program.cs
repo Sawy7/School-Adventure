@@ -210,26 +210,32 @@ namespace myTextAdventure
             GameOver();
         }
         public static void QuestFive()
-        {
-            NewScreen();
+        {  
             if (pozde == true)
             {
+                NewScreen();
                 Console.WriteLine("Protože jsi přišel do školy po zvonění, nestihl ses přezout a potkáváš na chodbě kantora, který kontroluje, jestli mají studenti na nohou přezuvky.");
                 Console.WriteLine("1) Za žádnou cenu nenavážu oční kontakt a svižně kráčím pryč\n2) Dělám, jakoby nic");
                 int choice = int.Parse(Console.ReadLine());
                 if (choice == 1)
                 {
                     Console.WriteLine("Akorát si na sebe strhl pozornost. Smůla.");
+                    score -= 1;
                 }
                 else
                 {
                     Console.WriteLine("Ty máš ale štěstí. Zrovna tebe si fakt nevšiml.");
+                    score += 1;
                 }
                 GameOver();
             }
             else
             {
             }
+        }
+        public static void QuestSix()
+        {
+
         }
     }
 }
