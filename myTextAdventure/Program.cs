@@ -1,9 +1,11 @@
-﻿using System;
+﻿﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using System.Reflection;
+using System.Security.Permissions;
 
 namespace myTextAdventure
 {
@@ -17,7 +19,7 @@ namespace myTextAdventure
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("School Adventure");
             Console.WriteLine("Vítejte v simulátoru školního života\n"); 
-            CharName();
+            /*CharName();
             Gender();
             Difficulty();
             QuestOne();
@@ -31,13 +33,36 @@ namespace myTextAdventure
             QuestThree();
             QuestFour();
             QuestFive();
+            QuestSix();*/
+            QuestSeven();
+            QuestFinal();
             Console.ReadKey();            
         }
+        /*
+        public static void QSkip() //metoda pro přeskakování questů
+        {
+        	Console.WriteLine("Zadejte suffix questu, do kterého chcete skočit (např.: One, Two,...Six):");
+        	string qNum = Console.ReadLine();
+        	qNum = "Quest" + qNum;
+        	MethodInfo qn = this.GetType().GetMethod(qNum);
+        	qn.Invoke(this, null);
+        	Console.WriteLine("Test questu dokončen. Pro zavření okna stiskněte libovolnou klávesu.");
+        	Environment.Exit(0);
+        }
+        */
         public static string CharName()
         {
             Console.WriteLine("Jak se jmenuješ, studente?");
             string characterName = Console.ReadLine();  //implementovat kontrolu pro dementy, kteří to jenom odentrujou
-            Console.WriteLine("Zdravím, {0}!\n", characterName);   
+            if (characterName == "qskip")
+            {
+            	score = 100;
+            	//QSkip();
+            }
+            else
+            {
+            	Console.WriteLine("Zdravím, {0}!\n", characterName);	
+            }
             return characterName;
         }
         public static bool Gender()
@@ -101,7 +126,7 @@ namespace myTextAdventure
             Console.ReadKey();
             Console.Clear();
         }
-        public static void QuestOne()
+        public static void QuestOne() //Jízda do školy
         {
             NewScreen();
             Console.WriteLine("Jedeš autobusem do školy. Přejel jsi tu správnou zastávku. Co uděláš?");
@@ -125,7 +150,7 @@ namespace myTextAdventure
             }
             GameOver();
         }
-        public static void QuestTwo()
+        public static void QuestTwo() //Dozor na chodbě
         {
             NewScreen();
             Console.WriteLine("Na chodbě vidíš dozor.");
@@ -146,7 +171,7 @@ namespace myTextAdventure
             }
             GameOver();            
         }
-        public static void QuestThree()
+        public static void QuestThree() //Hodina matematiky
         {
             NewScreen();
             Console.WriteLine("Vešel jsi do hodiny matematiky a učitel zkouší. Tipni si číslo od 1 do 5. Pokud se trefíš, dneska to na tebe nepadne.");
@@ -165,11 +190,11 @@ namespace myTextAdventure
             }
             GameOver();
         }
-        public static void QuestFour()
+        public static void QuestFour() //Bufet
         {
             NewScreen();
             Console.WriteLine("Dostal ses do řady v bufetu, ale přestávka není nekonečná. Pokud zvládneš opsat názvy těchto produktů v určitém čase, dostaneš se k jídlu, kterým si doplníš svůj žaludek (čti: skóre).");
-            string[] produkty = { "chlebanek", "bageta", "croissant", "Pepsi", "chipsy"};
+            string[] produkty = {"chlebanek", "bageta", "croissant", "Pepsi", "chipsy"};
             bool success = true;
             Console.ReadKey();
             Stopwatch cas = new Stopwatch();
@@ -189,27 +214,20 @@ namespace myTextAdventure
             }
             cas.Stop();
             Console.WriteLine("Čas: {0}\n", cas.Elapsed);
-            if (cas.Elapsed.TotalSeconds > 10 || success == false)
+            if (cas.Elapsed.TotalSeconds > 13 || success == false)
             {
                 success = false;
                 Console.WriteLine("Tak to úplně nevyšlo. Ztrácíš jeden bod.");
+                score -= 1;
             }
             else
             {
                 Console.WriteLine("Paráda, bez chyby a rychle. Dostáváš jeden bod.");
-            }
-            if (success == true)
-            {
                 score += 1;
             }
-            else
-            {
-                score -= 1;
-            }
-            Console.WriteLine("Tady něco nehraje.");
             GameOver();
         }
-        public static void QuestFive()
+        public static void QuestFive() //Přezuvky
         {  
             if (pozde == true)
             {
@@ -224,7 +242,7 @@ namespace myTextAdventure
                 }
                 else
                 {
-                    Console.WriteLine("Ty máš ale štěstí. Zrovna tebe si fakt nevšiml.");
+                    Console.WriteLine("Ty máš ale štěstí. Zrovna tebe si fakt nevšiml. Dostáváš bod navíc.");
                     score += 1;
                 }
                 GameOver();
@@ -233,9 +251,126 @@ namespace myTextAdventure
             {
             }
         }
-        public static void QuestSix()
+        public static void QuestSix() //Kopírka
         {
-
+        	NewScreen();
+        	Console.WriteLine("Potřebuješ si okopírovat papír do hodiny. Stiskni klávesu pro vložení peněz do automatu.");
+        	Console.ReadKey();
+        	Console.WriteLine("Kopírka se zasekla.");
+        	Console.WriteLine("1) Kopnu do ní\n2) Pokusím se najít příčinu a opravit problém sám\n3) Zajdu na vrátnici");
+        	int choice = int.Parse(Console.ReadLine());
+            if (choice == 1)
+            {
+                Console.WriteLine("Tak to nepomohlo. A navíc si tě dozor pozval do kabinetu. Z toho nebude nic dobrého..");
+                score -= 1;
+            }
+            else if (choice == 2)
+            {
+                Console.WriteLine("Nakonec to byl posunutý zásobník na papíry. Hotovo..");
+            }
+            else
+            {
+                Console.WriteLine("Tohle trvá věčnost. Nemáš kopii a do hodiny jdeš pozdě.");
+                score -= 1;
+            }
+            GameOver();
+        }
+        public static void QuestSeven() //Ajina
+        {
+        	NewScreen();
+        	Console.WriteLine("Přícházíš do hodiny angličtiny. Tvým úkolem v tomto testu je přepsat zobrazená čísla do numerické podoby. Až budeš připraven stiskni jakoukoliv klávesu.");
+        	//Console.ReadKey();
+        	//Random rnd = new Random();	//implementovat random
+        	int nahodneCislo = int.Parse(Console.ReadLine());//rnd.Next(0, 101);
+        	string[] vsechnyDesitky = {"twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety", ""};
+        	string[] vsechnyJednotky = {"", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", ""};
+        	string[] divnaCisla = {"tSen", "eleven", "twelve", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"};
+        	int desitky;
+        	int jednotky;
+        	string desitkySlovo;
+        	string finalniCislo;
+        	if (nahodneCislo < 10)
+        	{
+        		desitky = 0;
+        	}
+        	else
+        	{
+        		desitky = (nahodneCislo - (nahodneCislo%10))/10;
+        	}
+        	if (desitky < 2)
+        	{
+        		desitkySlovo = "";
+        	}
+        	else
+        	{
+        		desitkySlovo = vsechnyDesitky[desitky-2];
+        	}
+			jednotky = nahodneCislo - (desitky*10);        	
+        	string jednotkySlovo = vsechnyJednotky[jednotky];
+        	if (jednotkySlovo == "")
+        	{
+        		finalniCislo = desitkySlovo;
+        	}
+        	else if (desitkySlovo == "")
+        	{
+        		finalniCislo = jednotkySlovo;
+        	}
+        	else
+        	{
+        		finalniCislo = desitkySlovo + "-" + jednotkySlovo;;
+        	}
+        	if (nahodneCislo > 9 && nahodneCislo < 20)
+        	{
+        	 	finalniCislo = divnaCisla[nahodneCislo-10];
+        	}
+        	Console.WriteLine(finalniCislo);
+        	Console.WriteLine("Check: {0}", nahodneCislo);
+        	Console.ReadKey();
+        }
+        public static void QuestFinal() //Ucitel IVT
+        {
+        	NewScreen();
+        	Console.WriteLine("Dostal jsi se až k poslední události tvého školního dne. Zjišťuješ, že nemáš projekt z programování do hodin IKT. Budeš muset svého učitele přesvědčit, že jsi výuku nezanedbal a jsi schopen něco naprogramovat.");
+        	NewScreen();
+        	string[] otazky = {"V jakém programovacím jazyce je tato hra napsána? (2 slova, malým)", "Do jakého datového typu obyčejně zapisujeme slova a celé věty?", "Kolik je 5 na druhou?", "Která firma stojí za programovacím jazykem C#?", "Co napíšete, pokud chcete, aby program čekal na stisknutí libovolné klávesy?"};
+        	string[] odpovedi = {"c sharp", "string", "25", "Microsoft", "Console.ReadKey()"};
+        	Random rnd = new Random();
+            int poradi = rnd.Next(0, 5);
+            for (int i = poradi; i < 5; i++) {
+            	Console.WriteLine(otazky[i]);
+            	string odpovedInput = Console.ReadLine();
+            	if (odpovedInput == odpovedi[i])
+            	{
+            		Console.WriteLine("Správná odpověď, neztrácíš žádný bod.");
+            	}
+            	else 
+            	{
+            		score -= 1;
+            		Console.WriteLine("Špatná odpověď, ztrácíš jeden bod.");
+            	}
+            	GameOver();
+            	NewScreen();
+            }
+            for (int i = 0; i < poradi; i++) {
+            	Console.WriteLine(otazky[i]);
+            	string odpovedInput = Console.ReadLine();
+            	if (odpovedInput == odpovedi[i])
+            	{
+            		Console.WriteLine("Správná odpověď, neztrácíš žádný bod.");
+            	}
+            	else 
+            	{
+            		score -= 1;
+            		Console.WriteLine("Špatná odpověď, ztrácíš jeden bod.");
+            	}
+            	GameOver();
+            	NewScreen();
+            }
+        }
+        public static void EndScreen()
+        {
+        	Console.WriteLine("Nějakým způsobem se ti to podařilo dotáhnout až sem. Gratuluji! Jsi vítěz a za odměnu dostáváš dobrý pocit.\nPokud bys chtěl získat všechny soubory k tomuto malému projektu v přehledné formě online, neváhej a navštiv můj Github na http://github.com/Sawy7");
+        	Console.WriteLine("Tvé finální skóre je: {0}", score);
         }
     }
 }
