@@ -19,7 +19,7 @@ namespace myTextAdventure
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("School Adventure");
             Console.WriteLine("Vítejte v simulátoru školního života\n"); 
-            /*CharName();
+            CharName();
             Gender();
             Difficulty();
             QuestOne();
@@ -33,13 +33,13 @@ namespace myTextAdventure
             QuestThree();
             QuestFour();
             QuestFive();
-            QuestSix();*/
+            QuestSix();
             QuestSeven();
             QuestFinal();
-            Console.ReadKey();            
+            EndScreen();            
         }
         /*
-        public static void QSkip() //metoda pro přeskakování questů
+        public static void QSkip() //metoda pro přeskakování questů (nedokončený cheat-code koncept)
         {
         	Console.WriteLine("Zadejte suffix questu, do kterého chcete skočit (např.: One, Two,...Six):");
         	string qNum = Console.ReadLine();
@@ -53,15 +53,16 @@ namespace myTextAdventure
         public static string CharName()
         {
             Console.WriteLine("Jak se jmenuješ, studente?");
-            string characterName = Console.ReadLine();  //implementovat kontrolu pro dementy, kteří to jenom odentrujou
-            if (characterName == "qskip")
+            string characterName = Console.ReadLine(); 
+            if (characterName == "") //Kontrola pro zamezení pádu hry po vynechání zadání jména. Díky Honzo P.!
             {
-            	score = 100;
-            	//QSkip();
+            	Console.WriteLine("Zkus to znova.");
+            	NewScreen();
+            	CharName();
             }
             else
             {
-            	Console.WriteLine("Zdravím, {0}!\n", characterName);	
+            	Console.WriteLine("Zdravím, {0}!\n", characterName);
             }
             return characterName;
         }
@@ -126,6 +127,13 @@ namespace myTextAdventure
             Console.ReadKey();
             Console.Clear();
         }
+        public static int RandomGen(int minimum, int maximum)
+        {
+        	//Console.WriteLine("Rozsah je: {0} a {1}", minimum, maximum);
+        	Random rnd = new Random();
+        	int randomOut = rnd.Next(minimum, maximum);
+        	return randomOut;
+        }
         public static void QuestOne() //Jízda do školy
         {
             NewScreen();
@@ -175,8 +183,7 @@ namespace myTextAdventure
         {
             NewScreen();
             Console.WriteLine("Vešel jsi do hodiny matematiky a učitel zkouší. Tipni si číslo od 1 do 5. Pokud se trefíš, dneska to na tebe nepadne.");
-            Random rnd = new Random();
-            int sance = rnd.Next(1, 6);
+            int sance = RandomGen(1, 6);
             int tip = int.Parse(Console.ReadLine()); //Implementovat kontrolu pro prázdný vstup
             if (sance == tip)
             {
@@ -193,15 +200,15 @@ namespace myTextAdventure
         public static void QuestFour() //Bufet
         {
             NewScreen();
-            Console.WriteLine("Dostal ses do řady v bufetu, ale přestávka není nekonečná. Pokud zvládneš opsat názvy těchto produktů v určitém čase, dostaneš se k jídlu, kterým si doplníš svůj žaludek (čti: skóre).");
-            string[] produkty = {"chlebanek", "bageta", "croissant", "Pepsi", "chipsy"};
+            Console.WriteLine("Dostal ses do řady v bufetu, ale přestávka není nekonečná. Pokud zvládneš opsat názvy těchto produktů, které se postupně budou zobrazovat, v určitém čase, dostaneš se k jídlu, kterým si doplníš svůj žaludek (čti: skóre).");
+            string[] produkty = {"chlebánek", "bageta", "croissant", "Pepsi", "chipsy"};
             bool success = true;
             Console.ReadKey();
             Stopwatch cas = new Stopwatch();
             cas.Start();
             for (int i = 0; i < produkty.Length; i++)      
             {
-                Console.WriteLine("Napiš {0}", produkty[i]);
+                Console.WriteLine("Napiš: {0}", produkty[i]);
                 string input = Console.ReadLine();
                 if (input == produkty[i])
                 {
@@ -279,53 +286,67 @@ namespace myTextAdventure
         {
         	NewScreen();
         	Console.WriteLine("Přícházíš do hodiny angličtiny. Tvým úkolem v tomto testu je přepsat zobrazená čísla do numerické podoby. Až budeš připraven stiskni jakoukoliv klávesu.");
-        	//Console.ReadKey();
-        	//Random rnd = new Random();	//implementovat random
-        	int nahodneCislo = int.Parse(Console.ReadLine());//rnd.Next(0, 101);
+        	int nahodneCislo;
         	string[] vsechnyDesitky = {"twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety", ""};
         	string[] vsechnyJednotky = {"", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", ""};
-        	string[] divnaCisla = {"tSen", "eleven", "twelve", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"};
+        	string[] divnaCisla = {"ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"};
         	int desitky;
         	int jednotky;
         	string desitkySlovo;
         	string finalniCislo;
-        	if (nahodneCislo < 10)
+        	
+        	int zadanoUzivatelem;
+        	for (int i = 1; i < 7; i++)
         	{
-        		desitky = 0;
+        		NewScreen();
+        		nahodneCislo = RandomGen(1, 100);
+        		if (nahodneCislo < 10)
+        		{
+        			desitky = 0;
+        		}
+        		else
+        		{
+        			desitky = (nahodneCislo - (nahodneCislo%10))/10;
+        		}
+        		if (desitky < 2)
+        		{
+        			desitkySlovo = "";
+        		}
+        		else
+        		{
+        			desitkySlovo = vsechnyDesitky[desitky-2];
+        		}
+				jednotky = nahodneCislo - (desitky*10);        	
+        		string jednotkySlovo = vsechnyJednotky[jednotky];
+        		if (jednotkySlovo == "")
+        		{
+        			finalniCislo = desitkySlovo;
+        		}
+        		else if (desitkySlovo == "")
+        		{
+        			finalniCislo = jednotkySlovo;
+        		}
+        		else
+        		{
+        			finalniCislo = desitkySlovo + "-" + jednotkySlovo;;
+        		}
+        		if (nahodneCislo > 9 && nahodneCislo < 20)
+        		{
+        		 	finalniCislo = divnaCisla[nahodneCislo-10];
+        		}
+        		Console.WriteLine("Zapište číslo {0}", finalniCislo);
+        		zadanoUzivatelem = int.Parse(Console.ReadLine());
+        		if (zadanoUzivatelem == nahodneCislo)
+        		{
+        			Console.WriteLine("Správná odpověď, neztrácíš žádný bod.");
+        		}
+        		else
+        		{
+        			score -= 1;
+            		Console.WriteLine("Špatná odpověď, ztrácíš jeden bod.");	
+        		}
         	}
-        	else
-        	{
-        		desitky = (nahodneCislo - (nahodneCislo%10))/10;
-        	}
-        	if (desitky < 2)
-        	{
-        		desitkySlovo = "";
-        	}
-        	else
-        	{
-        		desitkySlovo = vsechnyDesitky[desitky-2];
-        	}
-			jednotky = nahodneCislo - (desitky*10);        	
-        	string jednotkySlovo = vsechnyJednotky[jednotky];
-        	if (jednotkySlovo == "")
-        	{
-        		finalniCislo = desitkySlovo;
-        	}
-        	else if (desitkySlovo == "")
-        	{
-        		finalniCislo = jednotkySlovo;
-        	}
-        	else
-        	{
-        		finalniCislo = desitkySlovo + "-" + jednotkySlovo;;
-        	}
-        	if (nahodneCislo > 9 && nahodneCislo < 20)
-        	{
-        	 	finalniCislo = divnaCisla[nahodneCislo-10];
-        	}
-        	Console.WriteLine(finalniCislo);
-        	Console.WriteLine("Check: {0}", nahodneCislo);
-        	Console.ReadKey();
+        	GameOver();
         }
         public static void QuestFinal() //Ucitel IVT
         {
@@ -333,9 +354,8 @@ namespace myTextAdventure
         	Console.WriteLine("Dostal jsi se až k poslední události tvého školního dne. Zjišťuješ, že nemáš projekt z programování do hodin IKT. Budeš muset svého učitele přesvědčit, že jsi výuku nezanedbal a jsi schopen něco naprogramovat.");
         	NewScreen();
         	string[] otazky = {"V jakém programovacím jazyce je tato hra napsána? (2 slova, malým)", "Do jakého datového typu obyčejně zapisujeme slova a celé věty?", "Kolik je 5 na druhou?", "Která firma stojí za programovacím jazykem C#?", "Co napíšete, pokud chcete, aby program čekal na stisknutí libovolné klávesy?"};
-        	string[] odpovedi = {"c sharp", "string", "25", "Microsoft", "Console.ReadKey()"};
-        	Random rnd = new Random();
-            int poradi = rnd.Next(0, 5);
+        	string[] odpovedi = {"c sharp", "string", "25", "Microsoft", "Console.ReadKey();"};
+        	int poradi = RandomGen(0, 5);
             for (int i = poradi; i < 5; i++) {
             	Console.WriteLine(otazky[i]);
             	string odpovedInput = Console.ReadLine();
@@ -371,6 +391,7 @@ namespace myTextAdventure
         {
         	Console.WriteLine("Nějakým způsobem se ti to podařilo dotáhnout až sem. Gratuluji! Jsi vítěz a za odměnu dostáváš dobrý pocit.\nPokud bys chtěl získat všechny soubory k tomuto malému projektu v přehledné formě online, neváhej a navštiv můj Github na http://github.com/Sawy7");
         	Console.WriteLine("Tvé finální skóre je: {0}", score);
+        	Console.ReadKey();
         }
     }
 }
