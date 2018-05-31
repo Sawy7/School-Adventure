@@ -14,12 +14,26 @@ namespace myTextAdventure
         static int score;
         static int scoreStart;
         static bool pozde;
+       /*public static void VolaciTest()
+        {
+            Console.WriteLine("Test zafungoval!");
+        }
+        public void volani()
+        {
+            Type t = this.GetType();
+            MethodInfo method = t.GetMethod("VolaciTest");
+            method.Invoke(this, null);
+            //následující kousek do metody, která bude volat odkaz
+            Game game = new Game();
+            game.volani();
+        }*/
         public static void Main()
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("School Adventure");
             Console.WriteLine("Vítejte v simulátoru školního života\n"); 
             CharName();
+            
             Gender();
             Difficulty();
             QuestOne();
@@ -56,7 +70,7 @@ namespace myTextAdventure
             string characterName = Console.ReadLine(); 
             if (characterName == "") //Kontrola pro zamezení pádu hry po vynechání zadání jména. Díky Honzo P.!
             {
-            	Console.WriteLine("Zkus to znova.");
+            	Console.WriteLine("Zkus to znova."); //vložit do samostatné funkce - použij reflection vole!
             	NewScreen();
             	CharName();
             }
