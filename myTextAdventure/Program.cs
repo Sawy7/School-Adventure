@@ -14,19 +14,6 @@ namespace myTextAdventure
         static int score;
         static int scoreStart;
         static bool pozde;
-       /*public static void VolaciTest()
-        {
-            Console.WriteLine("Test zafungoval!");
-        }
-        public void volani()
-        {
-            Type t = this.GetType();
-            MethodInfo method = t.GetMethod("VolaciTest");
-            method.Invoke(this, null);
-            //následující kousek do metody, která bude volat odkaz
-            Game game = new Game();
-            game.volani();
-        }*/
         public static void Main()
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
@@ -52,18 +39,25 @@ namespace myTextAdventure
             QuestFinal();
             EndScreen();            
         }
-        /*
-        public static void QSkip() //metoda pro přeskakování questů (nedokončený cheat-code koncept)
+        public static void QSkip() //metoda pro přeskakování questů (cheat-code koncept)
         {
-        	Console.WriteLine("Zadejte suffix questu, do kterého chcete skočit (např.: One, Two,...Six):");
+            NewScreen();
+            Console.WriteLine("Zadejte suffix questu, do kterého chcete skočit\nNabídka: one - seven; final");
         	string qNum = Console.ReadLine();
-        	qNum = "Quest" + qNum;
-        	MethodInfo qn = this.GetType().GetMethod(qNum);
-        	qn.Invoke(this, null);
-        	Console.WriteLine("Test questu dokončen. Pro zavření okna stiskněte libovolnou klávesu.");
+            qNum = "Quest" + char.ToUpper(qNum[0]) + qNum.Substring(1);
+            score = 100;
+            Game game = new Game();
+            game.CallAnything(qNum);
+            Console.WriteLine("Test questu dokončen. Pro zavření okna stiskněte libovolnou klávesu.");
+            Console.ReadKey();
         	Environment.Exit(0);
         }
-        */
+        public void CallAnything(string calledMethod)
+        {
+            Type t = this.GetType();
+            MethodInfo method = t.GetMethod(calledMethod);
+            method.Invoke(this, null);
+        }
         public static string CharName()
         {
             Console.WriteLine("Jak se jmenuješ, studente?");
@@ -73,6 +67,10 @@ namespace myTextAdventure
             	Console.WriteLine("Zkus to znova."); //vložit do samostatné funkce - použij reflection vole!
             	NewScreen();
             	CharName();
+            }
+            else if (characterName == "qskip")
+            {
+                QSkip();
             }
             else
             {
@@ -348,6 +346,7 @@ namespace myTextAdventure
         		{
         		 	finalniCislo = divnaCisla[nahodneCislo-10];
         		}
+                finalniCislo = char.ToUpper(finalniCislo[0]) + finalniCislo.Substring(1);
         		Console.WriteLine("Zapište číslo {0}", finalniCislo);
         		zadanoUzivatelem = int.Parse(Console.ReadLine());
         		if (zadanoUzivatelem == nahodneCislo)
