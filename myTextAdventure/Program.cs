@@ -14,13 +14,13 @@ namespace myTextAdventure
         static int score;
         static int scoreStart;
         static bool pozde;
+        static string charName;
         public static void Main()
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("School Adventure");
             Console.WriteLine("Vítejte v simulátoru školního života\n"); 
             CharName();
-            
             Gender();
             Difficulty();
             QuestOne();
@@ -58,25 +58,24 @@ namespace myTextAdventure
             MethodInfo method = t.GetMethod(calledMethod);
             method.Invoke(this, null);
         }
-        public static string CharName()
+        public static void CharName()
         {
             Console.WriteLine("Jak se jmenuješ, studente?");
-            string characterName = Console.ReadLine(); 
-            if (characterName == "") //Kontrola pro zamezení pádu hry po vynechání zadání jména. Díky Honzo P.!
+            charName = Console.ReadLine(); 
+            if (charName == "") //Kontrola pro zamezení pádu hry po vynechání zadání jména. Díky Honzo P.!
             {
                 Console.WriteLine("Zkus to znova."); //Snaha vložit do samostané funkce - příliš mnoho odkazů
             	NewScreen();
             	CharName();
             }
-            else if (characterName == "qskip")
+            else if (charName == "qskip")
             {
                 QSkip();
             }
             else
             {
-            	Console.WriteLine("Zdravím, {0}!\n", characterName);
+            	Console.WriteLine("Zdravím, {0}!\n", charName);
             }
-            return characterName;
         }
         public static bool Gender()
         {
@@ -487,7 +486,7 @@ namespace myTextAdventure
         public static void EndScreen()
         {
         	Console.WriteLine("Nějakým způsobem se ti to podařilo dotáhnout až sem. Gratuluji! Jsi vítěz a za odměnu dostáváš dobrý pocit.\nPokud bys chtěl získat všechny soubory k tomuto malému projektu v přehledné formě online, neváhej a navštiv můj Github na http://github.com/Sawy7");
-        	Console.WriteLine("Tvé finální skóre je: {0}", score);
+        	Console.WriteLine("\nTvé finální skóre je: {0}", score);
         	Console.ReadKey();
         }
     }
